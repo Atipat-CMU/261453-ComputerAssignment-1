@@ -1,4 +1,7 @@
 #include "../include/dip.h"
+#include <iostream>
+#include <vector>
+using namespace std;
 
 using namespace dip;
 
@@ -9,9 +12,7 @@ int main(int argc, char const *argv[])
     imwrite(image, "output.pgm");
 
     BlobColoring blob;
-    blob.coloring(image, 0, 244);
-
-    // image.printHistogram();
-
+    blob.coloring(image, 0, 254);
+    
     return 0;
 }

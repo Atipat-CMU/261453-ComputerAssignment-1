@@ -19,18 +19,20 @@ namespace dip {
         void calHistogram();
     public:
         Image();
-        Image(vector<vector<unsigned int>>, int, int, int);
         Image(vector<char>, vector<vector<unsigned int>>, int, int, int);
+        Image(vector<vector<unsigned int>>, int, int, int);
         ~Image();
 
         // function
         int rows();
         int cols();
         int max();
-        vector<vector<unsigned int>> get();
-        int get(Pixel);
+
         vector<char> getRaw();
-        bool isOut(Pixel);
+        vector<vector<unsigned int>> get();
+
+        int get(Pixel);
+        bool isOutOfImage(Pixel);
         void printHistogram();
     };
 
@@ -73,22 +75,23 @@ namespace dip {
         return this->max_val;
     }
 
+    vector<char> Image::getRaw(){
+        return this->raw_image;
+    }
+
     vector<vector<unsigned int>> Image::get(){
         return this->image;
     }
 
     int Image::get(Pixel p){
-        return this->image[p.getX()][p.getY()];
+        if(isOutOfImage(p)) return -1;
+        return this->image[p.x][p.y];
     }
 
-    vector<char> Image::getRaw(){
-        return this->raw_image;
-    }
-
-    bool Image::isOut(Pixel pixel){
-        int x = pixel.getX();
-        int y = pixel.getY();
-        return !(0 <= x && x <= numrows && 0 <= y && y <= numcols);
+    bool Image::isOutOfImage(Pixel p){
+        int x = p.x;
+        int y = p.y;
+        return !(0 <= x && x < numrows && 0 <= y && y < numcols);
     }
 
     void Image::calHistogram(){
