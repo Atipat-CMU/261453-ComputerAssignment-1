@@ -40,19 +40,20 @@ namespace dip {
         int imsize = 0;
 
         vector<vector<unsigned int>> image;
-        vector<char> raw_image;
-        raw_image.reserve(numcols * numrows);
+        vector<vector<char>> raw_image;
 
         char pixel;
 
         for(int row = 0; row < numrows; row++){
-            vector<unsigned int> v_row;
+            vector<unsigned int> i_row;
+            vector<char> r_row;
             for(int col = 0; col < numcols; col++){
                 file.read(&pixel, 1);
-                v_row.push_back(static_cast<int>(static_cast<unsigned char>(pixel)));
-                raw_image.push_back(pixel);
+                i_row.push_back(static_cast<int>(static_cast<unsigned char>(pixel)));
+                r_row.push_back(pixel);
             }
-            image.push_back(v_row);
+            image.push_back(i_row);
+            raw_image.push_back(r_row);
         }
         file.close();
 
@@ -64,7 +65,16 @@ namespace dip {
         file << "P5" << endl;
         file << image.cols() << " " << image.rows() << endl;
         file << image.max() << endl;
-        file.write(image.getRaw().data(), image.getRaw().size());
+
+        vector<char> raw1d;
+
+        for (const auto& row : image.getRaw()) {
+            for (char element : row) {
+                raw1d.push_back(element);
+            }
+        }
+
+        file.write(raw1d.data(), raw1d.size());
         file.close();
     }
 

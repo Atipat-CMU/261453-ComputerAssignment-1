@@ -7,6 +7,7 @@ using namespace std;
 
 #include "Image.h"
 #include "Mask.h"
+#include "Frame.h"
 
 namespace dip {
     class BlobColoring
@@ -21,7 +22,7 @@ namespace dip {
     public:
         BlobColoring();
         ~BlobColoring();
-        void coloring(Image, int, int);
+        vector<Frame> coloring(Image, int, int);
     };
     
     BlobColoring::BlobColoring()
@@ -37,7 +38,7 @@ namespace dip {
         return min <= d && d <= max;
     }
 
-    void BlobColoring::coloring(Image image, int min, int max){
+    vector<Frame> BlobColoring::coloring(Image image, int min, int max){
         this->image = image;
         this->min = min;
         this->max = max;
@@ -110,10 +111,30 @@ namespace dip {
             for(int y = 0; y < labeling.cols(); y++){
                 Pixel p = Pixel(x,y);
                 labeling.set(p, label_map[labeling.get(p)]);
+
             }
         }
 
         this->num = blob_table.size();
-        cout << blob_table.size() << endl;
+
+        vector<Frame> frames;
+
+        for (int blob = 1; blob <= blob_table.size(); blob++) {
+            int xs = labeling.rows(), ys = labeling.cols(), xl = 0, yl = 0;
+            for(int x = 0; x < labeling.rows(); x++){
+                for(int y = 0; y < labeling.cols(); y++){
+                    Pixel p = Pixel(x,y);
+                    if(labeling.get(p) == blob){
+                        if(x < xs) xs = x;
+                        if(y < ys) ys = y;
+                        if(x > xl) xl = x;
+                        if(y > yl) yl = y;
+                    }
+                }
+            }
+            frames.emplace_back(Frame(xs, ys, xl, yl));
+        }
+
+        return frames;
     }
 }

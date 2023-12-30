@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "Pixel.h"
+#include "Frame.h"
 
 namespace dip {
 
@@ -11,7 +12,7 @@ namespace dip {
     {
     private:
         vector<vector<unsigned int>> image;
-        vector<char> raw_image;
+        vector<vector<char>> raw_image;
         int histogram[256];
         int numrows, numcols;
         int max_val;
@@ -19,7 +20,7 @@ namespace dip {
         void calHistogram();
     public:
         Image();
-        Image(vector<char>, vector<vector<unsigned int>>, int, int, int);
+        Image(vector<vector<char>>, vector<vector<unsigned int>>, int, int, int);
         Image(vector<vector<unsigned int>>, int, int, int);
         ~Image();
 
@@ -28,19 +29,21 @@ namespace dip {
         int cols();
         int max();
 
-        vector<char> getRaw();
+        vector<vector<char>> getRaw();
         vector<vector<unsigned int>> get();
 
         int get(Pixel);
         bool isOutOfImage(Pixel);
         void printHistogram();
+
+        Image crop(Frame);
     };
 
     Image::Image()
     {
     }
 
-    Image::Image(vector<char> raw_image, vector<vector<unsigned int>> image, int numrows, int numcols, int max_val)
+    Image::Image(vector<vector<char>> raw_image, vector<vector<unsigned int>> image, int numrows, int numcols, int max_val)
     {
         this->raw_image = raw_image;
         this->image = image;
@@ -75,7 +78,7 @@ namespace dip {
         return this->max_val;
     }
 
-    vector<char> Image::getRaw(){
+    vector<vector<char>> Image::getRaw(){
         return this->raw_image;
     }
 
@@ -109,5 +112,25 @@ namespace dip {
         for(int i = 0; i < 256; i++){
             cout << i << ": " << histogram[i] << endl;
         }
+    }
+
+    Image Image::crop(Frame frame){
+        Pixel top = frame.getTop();
+        Pixel bottom = frame.getBottom();
+
+        int c_rows = bottom.x-top.x+1;
+        int c_cols = bottom.y-top.y+1;
+
+        vector<vector<char>> raw_cropedImage;
+
+        raw_cropedImage.resize(c_rows, vector<char>(c_cols));
+
+        for(int row = 0; row < c_rows; ++row) {
+            for(int col = 0; col < c_cols; ++col) {
+                raw_cropedImage[row][col] = image[top.x+row][top.y+col];
+            }
+        }
+
+        return Image(raw_cropedImage, image, c_rows, c_cols, max_val);
     }
 }
