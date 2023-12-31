@@ -53,14 +53,14 @@ namespace dip {
         }
         file.close();
 
-        return Image(raw_image, image, max_val);
+        return Image(raw_image, image);
     }
 
     void imwrite(Image image, string filename){
         ofstream file(filename, std::ios::binary);
         file << "P5" << endl;
         file << image.cols() << " " << image.rows() << endl;
-        file << image.max() << endl;
+        file << "255" << endl;
 
         vector<char> raw1d = image.getRaw().get1D();
 

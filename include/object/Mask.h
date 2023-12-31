@@ -9,6 +9,8 @@ namespace dip  {
     {
     private:
         Vector2D<int> mask;
+
+        bool isOutOfMask(Pixel);
     public:
         Mask();
         Mask(int, int);
@@ -18,9 +20,12 @@ namespace dip  {
         int cols();
 
         void set(Pixel, int);
+        void set(int, int, int);
 
         int get(Pixel);
-        bool isOutOfMask(Pixel);
+        int get(int, int);
+
+        Mask toBinary(int);
     };
     
     Mask::Mask()
@@ -49,15 +54,38 @@ namespace dip  {
         this->mask.set(p.x, p.y, d);
     }
 
+    void Mask::set(int x, int y, int d){
+        this->set(Pixel(x, y), d);
+    }
+
     int Mask::get(Pixel p){
         if(isOutOfMask(p)) return -1;
         return this->mask.get(p.x, p.y);
+    }
+
+    int Mask::get(int x, int y){
+        return this->get(Pixel(x, y));
     }
 
     bool Mask::isOutOfMask(Pixel p){
         int x = p.x;
         int y = p.y;
         return !((0 <= x && x < this->rows()) && (0 <= y && y < this->cols()));
+    }
+
+    Mask Mask::toBinary(int value){
+        Mask binary(this->rows(), this->cols());
+
+        for(size_t row = 0; row < this->rows(); ++row) {
+            for(size_t col = 0; col < this->cols(); ++col) {
+                if(mask.get(row, col) == value) {
+                    binary.set(row, col, 1);
+                }
+                else binary.set(row, col, 0);
+            }
+        }
+
+        return binary;
     }
     
 }

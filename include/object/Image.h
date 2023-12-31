@@ -17,13 +17,14 @@ namespace dip {
         Vector2D<unsigned int> image;
         Vector2D<char> raw_image;
         int histogram[256];
-        int max_val;
+        int max_val = 0;
 
         void calHistogram();
+        bool isOutOfImage(Pixel);
     public:
         Image();
-        Image(int, int, int);
-        Image(Vector2D<char>, Vector2D<unsigned int>, int);
+        Image(int, int);
+        Image(Vector2D<char>, Vector2D<unsigned int>);
         ~Image();
 
         // function
@@ -36,7 +37,6 @@ namespace dip {
 
         int get(Pixel);
         int get(int, int);
-        bool isOutOfImage(Pixel);
         void printHistogram();
 
         Image crop(Frame);
@@ -46,18 +46,18 @@ namespace dip {
     {
     }
 
-    Image::Image(int numrows, int numcols, int max_val)
+    Image::Image(int numrows, int numcols)
     {
-        this->max_val = max_val;
         this->raw_image = Vector2D<char>(numrows, numcols);
         this->image = Vector2D<unsigned>(numrows, numcols);
+        this->calHistogram();
     }
 
-    Image::Image(Vector2D<char> raw_image, Vector2D<unsigned int> image, int max_val)
+    Image::Image(Vector2D<char> raw_image, Vector2D<unsigned int> image)
     {
-        this->max_val = max_val;
         this->raw_image = raw_image;
         this->image = image;
+        this->calHistogram();
     }
 
     Image::~Image()
@@ -105,13 +105,14 @@ namespace dip {
         }
         for(int row = 0; row < this->rows(); ++row) {
             for(int col = 0; col < this->cols(); ++col) {
-                this->histogram[this->image.get(row, col)]++;
+                int d = this->image.get(row, col);
+                this->histogram[d]++;
+                if(d > max_val) max_val = d;
             }
         }
     }
 
     void Image::printHistogram(){
-        this->calHistogram();
         for(int i = 0; i < 256; i++){
             cout << i << ": " << this->histogram[i] << endl;
         }
@@ -127,7 +128,7 @@ namespace dip {
         Vector2D<char> raw_cropedImage = raw_image.crop(top.x, top.y, bottom.x, bottom.y);
         Vector2D<unsigned int> cropedImage = image.crop(top.x, top.y, bottom.x, bottom.y);
 
-        return Image(raw_cropedImage, cropedImage, max_val);
+        return Image(raw_cropedImage, cropedImage);
     }
 }
 

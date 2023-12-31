@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BLOBCOLORING_H
+#define BLOBCOLORING_H
 
 #include <vector>
 #include <map>
@@ -15,18 +16,31 @@ namespace dip {
     private:
         int num;
         Image image;
-        Mask labeling;
         int min, max;
-        Pixel p;
+        Mask labeling;
+        vector<Frame> frames;
         bool isComponent(int);
+
+        vector<Frame> coloring();
     public:
         BlobColoring();
+        BlobColoring(Image, int, int);
         ~BlobColoring();
-        vector<Frame> coloring(Image, int, int);
+        Mask getLabelMask();
+        vector<Frame> getComponents();
+        int nums();
     };
-    
+
     BlobColoring::BlobColoring()
     {
+    }
+    
+    BlobColoring::BlobColoring(Image image, int min, int max)
+    {
+        this->image = image;
+        this->min = min;
+        this->max = max;
+        this->frames = this->coloring();
     }
     
     BlobColoring::~BlobColoring()
@@ -38,11 +52,7 @@ namespace dip {
         return min <= d && d <= max;
     }
 
-    vector<Frame> BlobColoring::coloring(Image image, int min, int max){
-        this->image = image;
-        this->min = min;
-        this->max = max;
-
+    vector<Frame> BlobColoring::coloring(){
         int k = 1;
         map<int,int> eq_table;
         map<int,int> label_map;
@@ -137,4 +147,18 @@ namespace dip {
 
         return frames;
     }
+
+    Mask BlobColoring::getLabelMask(){
+        return this->labeling;
+    }
+
+    vector<Frame> BlobColoring::getComponents(){
+        return this->frames;
+    }
+
+    int BlobColoring::nums(){
+        return this->num;
+    }
 }
+
+#endif
