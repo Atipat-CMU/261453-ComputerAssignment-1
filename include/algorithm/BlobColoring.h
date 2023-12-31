@@ -5,9 +5,9 @@
 #include <iostream>
 using namespace std;
 
-#include "Image.h"
-#include "Mask.h"
-#include "Frame.h"
+#include "../object/Image.h"
+#include "../object/Mask.h"
+#include "../object/Frame.h"
 
 namespace dip {
     class BlobColoring

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef PIXEL_H
+#define PIXEL_H
 
 #include <vector>
 using namespace std;
@@ -31,3 +32,5 @@ namespace dip {
     {
     }
 }
+
+#endif

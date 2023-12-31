@@ -1,4 +1,4 @@
 #pragma once
 
 #include "im.h"
-#include "BlobColoring.h"
+#include "algorithm/BlobColoring.h"

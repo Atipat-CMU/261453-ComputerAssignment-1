@@ -5,7 +5,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "Image.h"
+#include "object/Image.h"
 
 using namespace std;
 
@@ -39,25 +39,21 @@ namespace dip {
         
         int imsize = 0;
 
-        vector<vector<unsigned int>> image;
-        vector<vector<char>> raw_image;
+        Vector2D<unsigned int> image = Vector2D<unsigned int>(numrows, numcols);
+        Vector2D<char> raw_image = Vector2D<char>(numrows, numcols);
 
         char pixel;
 
         for(int row = 0; row < numrows; row++){
-            vector<unsigned int> i_row;
-            vector<char> r_row;
             for(int col = 0; col < numcols; col++){
                 file.read(&pixel, 1);
-                i_row.push_back(static_cast<int>(static_cast<unsigned char>(pixel)));
-                r_row.push_back(pixel);
+                image.set(row, col, static_cast<int>(static_cast<unsigned char>(pixel)));
+                raw_image.set(row, col, pixel);
             }
-            image.push_back(i_row);
-            raw_image.push_back(r_row);
         }
         file.close();
 
-        return Image(raw_image, image, numrows, numcols, max_val);
+        return Image(raw_image, image, max_val);
     }
 
     void imwrite(Image image, string filename){
@@ -66,13 +62,7 @@ namespace dip {
         file << image.cols() << " " << image.rows() << endl;
         file << image.max() << endl;
 
-        vector<char> raw1d;
-
-        for (const auto& row : image.getRaw()) {
-            for (char element : row) {
-                raw1d.push_back(element);
-            }
-        }
+        vector<char> raw1d = image.getRaw().get1D();
 
         file.write(raw1d.data(), raw1d.size());
         file.close();
@@ -81,7 +71,7 @@ namespace dip {
     void imshow(Image image){
         for(int row = 0; row < image.rows(); ++row) {
             for(int col = 0; col < image.cols(); ++col) {
-                cout << image.get()[row][col] << " ";
+                cout << image.get(row, col) << " ";
             }
             cout << endl;
         }

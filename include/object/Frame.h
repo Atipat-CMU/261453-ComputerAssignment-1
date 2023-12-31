@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FRAME_H
+#define FRAME_H
 
 #include <vector>
 using namespace std;
@@ -42,3 +43,5 @@ namespace dip {
     }
     
 }
+
+#endif
