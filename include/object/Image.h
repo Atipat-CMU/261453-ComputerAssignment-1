@@ -15,7 +15,6 @@ namespace dip {
     {
     private:
         Vector2D<unsigned int> image;
-        Vector2D<char> raw_image;
         int histogram[256];
         int max_val = 0;
 
@@ -24,7 +23,7 @@ namespace dip {
     public:
         Image();
         Image(int, int);
-        Image(Vector2D<char>, Vector2D<unsigned int>);
+        Image(Vector2D<unsigned int>);
         ~Image();
 
         // function
@@ -48,14 +47,12 @@ namespace dip {
 
     Image::Image(int numrows, int numcols)
     {
-        this->raw_image = Vector2D<char>(numrows, numcols);
         this->image = Vector2D<unsigned>(numrows, numcols);
         this->calHistogram();
     }
 
-    Image::Image(Vector2D<char> raw_image, Vector2D<unsigned int> image)
+    Image::Image(Vector2D<unsigned int> image)
     {
-        this->raw_image = raw_image;
         this->image = image;
         this->calHistogram();
     }
@@ -74,10 +71,6 @@ namespace dip {
 
     int Image::max(){
         return this->max_val;
-    }
-
-    Vector2D<char> Image::getRaw(){
-        return this->raw_image;
     }
 
     Vector2D<unsigned int> Image::get(){
@@ -125,10 +118,8 @@ namespace dip {
         int c_rows = bottom.x-top.x+1;
         int c_cols = bottom.y-top.y+1;
 
-        Vector2D<char> raw_cropedImage = raw_image.crop(top.x, top.y, bottom.x, bottom.y);
         Vector2D<unsigned int> cropedImage = image.crop(top.x, top.y, bottom.x, bottom.y);
-
-        return Image(raw_cropedImage, cropedImage);
+        return Image(cropedImage);
     }
 }
 

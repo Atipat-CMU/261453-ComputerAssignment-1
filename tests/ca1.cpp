@@ -8,7 +8,7 @@ using namespace dip;
 int main(int argc, char const *argv[])
 {
     Image image;
-    image = imread("src/random_shape.pgm");
+    image = imread("src/ca1/random_shape.pgm");
     // image.printHistogram();
 
     BlobColoring blobs(image, 0, 230);
@@ -23,7 +23,7 @@ int main(int argc, char const *argv[])
     // }
 
     Image cropedImage = image.crop(frames[7]);
-    imwrite(cropedImage, "out/crop.pgm");
+    imwrite(cropedImage, "out/ca1/crop.pgm");
 
     return 0;
 }

@@ -40,7 +40,6 @@ namespace dip {
         int imsize = 0;
 
         Vector2D<unsigned int> image = Vector2D<unsigned int>(numrows, numcols);
-        Vector2D<char> raw_image = Vector2D<char>(numrows, numcols);
 
         char pixel;
 
@@ -48,12 +47,11 @@ namespace dip {
             for(int col = 0; col < numcols; col++){
                 file.read(&pixel, 1);
                 image.set(row, col, static_cast<int>(static_cast<unsigned char>(pixel)));
-                raw_image.set(row, col, pixel);
             }
         }
         file.close();
 
-        return Image(raw_image, image);
+        return Image(image);
     }
 
     void imwrite(Image image, string filename){
@@ -62,7 +60,13 @@ namespace dip {
         file << image.cols() << " " << image.rows() << endl;
         file << "255" << endl;
 
-        vector<char> raw1d = image.getRaw().get1D();
+        vector<char> raw1d;
+
+        for(int row = 0; row < image.rows(); row++){
+            for(int col = 0; col < image.cols(); col++){
+                raw1d.push_back(static_cast<char>(image.get(row, col)));
+            }
+        }
 
         file.write(raw1d.data(), raw1d.size());
         file.close();
