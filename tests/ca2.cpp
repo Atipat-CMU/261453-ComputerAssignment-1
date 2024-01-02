@@ -4,7 +4,11 @@ using namespace std;
 using namespace dip;
 
 int eq_linear1(int x){
-    return 2*x;
+    return 1.5*x;
+}
+
+int eq_equalize(int x, int Dmax){
+    return x*(255.0/Dmax);
 }
 
 int eq_offsetup(int x, int Dmax){
@@ -39,8 +43,12 @@ int main(int argc, char const *argv[])
 {
     Image image = imread("src/ca2/SEM256_256.pgm");
 
-    Image imageL1 = poperation(image, eq_offsetup);
-    imwrite(image, "out/ca2/SEM256_256_eq_offsetup.pgm");
+    // Image imageL1 = poperation(image, eq_linear1);
+    // imwrite(imageL1, "out/ca2/SEM256_256_eq_linear1.pgm");
+
+    Image imageH = poperation(image, eq_boostdown);
+    imageH = poperation(imageH, eq_equalize);
+    imwrite(imageH, "out/ca2/SEM256_256_best.pgm");
 
     return 0;
 }

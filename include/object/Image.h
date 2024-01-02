@@ -30,12 +30,14 @@ namespace dip {
         int rows();
         int cols();
         int max();
+        int area();
 
         Vector2D<char> getRaw();
         Vector2D<unsigned int> get();
 
         int get(Pixel);
         int get(int, int);
+        int getHistFreq(int);
         void printHistogram();
 
         Image crop(Frame);
@@ -73,6 +75,10 @@ namespace dip {
         return this->max_val;
     }
 
+    int Image::area(){
+        return this->rows()*this->cols();
+    }
+
     Vector2D<unsigned int> Image::get(){
         return this->image;
     }
@@ -103,6 +109,10 @@ namespace dip {
                 if(d > max_val) max_val = d;
             }
         }
+    }
+
+    int Image::getHistFreq(int d){
+        return this->histogram[d];
     }
 
     void Image::printHistogram(){
