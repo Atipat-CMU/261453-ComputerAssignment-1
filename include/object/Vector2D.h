@@ -16,11 +16,11 @@ namespace dip {
         Vector2D(size_t rows, size_t cols);
         ~Vector2D();
 
-        int rows();
-        int cols();
+        int rows() const;
+        int cols() const;
 
         void set(size_t, size_t, const T&);
-        T get(size_t, size_t);
+        T get(size_t, size_t) const;
         vector<T> get1D();
         Vector2D<T> crop(size_t, size_t, size_t, size_t);
     };
@@ -44,12 +44,12 @@ namespace dip {
     }
 
     template<class T>
-    int Vector2D<T>::rows(){
+    int Vector2D<T>::rows() const{
         return this->numrows;
     }
 
     template<class T>
-    int Vector2D<T>::cols(){
+    int Vector2D<T>::cols() const{
         return this->numcols;
     }
 
@@ -63,7 +63,7 @@ namespace dip {
     }
 
     template<class T>
-    T Vector2D<T>::get(size_t row, size_t col) {
+    T Vector2D<T>::get(size_t row, size_t col) const{
         if (row < numrows && col < numcols) {
             return vec2D[row][col];
         } else {

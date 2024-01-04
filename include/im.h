@@ -39,7 +39,7 @@ namespace dip {
         
         int imsize = 0;
 
-        Vector2D<unsigned int> image = Vector2D<unsigned int>(numrows, numcols);
+        Vector2D<int> image = Vector2D<int>(numrows, numcols);
 
         char pixel;
 
@@ -64,7 +64,10 @@ namespace dip {
 
         for(int row = 0; row < image.rows(); row++){
             for(int col = 0; col < image.cols(); col++){
-                raw1d.push_back(static_cast<char>(image.get(row, col)));
+                int d = image.get(row, col);
+                if(d < 0) d = 0;
+                if(d > 255) d = 255;
+                raw1d.push_back(static_cast<unsigned char>(d));
             }
         }
 
