@@ -120,25 +120,25 @@ namespace dip {
 
     Pixel intersection(Pixel l11, Pixel l12, Pixel l21, Pixel l22){
         if((l12.x() - l11.x()) != 0 && (l22.x() - l21.x()) != 0){
-            double m1 = static_cast<double>(l12.y() - l11.y()) / (l12.x() - l11.x());
+            double m1 = (double)(l12.y() - l11.y()) / (l12.x() - l11.x());
             double c1 = l11.y() - (l11.x() * m1);
-            double m2 = static_cast<double>(l22.y() - l21.y()) / (l22.x() - l21.x());
+            double m2 = (double)(l22.y() - l21.y()) / (l22.x() - l21.x());
             double c2 = l21.y() - (l21.x() * m2);
 
             double x = (c2 - c1) / (m1 - m2);
             double y = m1 * x + c1;
 
-            return Pixel(static_cast<int>(x),static_cast<int>(y));
+            return Pixel((int)x, (int)y);
         }else{
-            double m1 = static_cast<double>(l12.x() - l11.x()) / (l12.y() - l11.y());
+            double m1 = (double)(l12.x() - l11.x()) / (l12.y() - l11.y());
             double c1 = l11.x() - (l11.y() * m1);
-            double m2 = static_cast<double>(l22.x() - l21.x()) / (l22.y() - l21.y());
+            double m2 = (double)(l22.x() - l21.x()) / (l22.y() - l21.y());
             double c2 = l21.x() - (l21.y() * m2);
 
             double y = (c2 - c1) / (m1 - m2);
             double x = m1 * y + c1;
 
-            return Pixel(static_cast<int>(x),static_cast<int>(y));
+            return Pixel((int)x, (int)y);
         }
     }
 
