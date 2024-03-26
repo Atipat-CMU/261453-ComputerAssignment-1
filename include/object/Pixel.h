@@ -1,9 +1,6 @@
 #ifndef PIXEL_H
 #define PIXEL_H
 
-#include <vector>
-using namespace std;
-
 namespace dip {
 
     class Pixel
@@ -11,8 +8,8 @@ namespace dip {
     private:
         int x_ = 0, y_ = 0;
     public:
-        const int& x = x_;
-        const int& y = y_;
+        int x();
+        int y();
         Pixel();
         Pixel(int, int);
         ~Pixel();
@@ -20,6 +17,14 @@ namespace dip {
 
     Pixel::Pixel()
     {
+    }
+
+    int Pixel::x(){
+        return x_;
+    }
+
+    int Pixel::y(){
+        return y_;
     }
     
     Pixel::Pixel(int x, int y)

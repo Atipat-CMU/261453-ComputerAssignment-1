@@ -1,11 +1,12 @@
-#pragma once
+#ifndef IM_H
+#define IM_H
 
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 
-#include "object/Image.h"
+#include "../include/object/Image.h"
 
 using namespace std;
 
@@ -84,3 +85,5 @@ namespace dip {
         }
     }
 }
+
+#endif

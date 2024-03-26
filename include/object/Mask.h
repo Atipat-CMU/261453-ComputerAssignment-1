@@ -2,6 +2,13 @@
 #define MASK_H
 
 #include <vector>
+#include <string>
+#include <fstream>
+#include <iostream>
+
+#include "Vector2D.h"
+#include "Pixel.h"
+
 using namespace std;
 
 namespace dip  {
@@ -16,8 +23,8 @@ namespace dip  {
         Mask(int, int);
         ~Mask();
 
-        int rows();
-        int cols();
+        int rows() const;
+        int cols() const;
 
         void set(Pixel, int);
         void set(int, int, int);
@@ -26,6 +33,8 @@ namespace dip  {
         int get(int, int);
 
         Mask toBinary(int);
+        void toTextFile(string, int);
+        void fromTextFile(string, int);
     };
     
     Mask::Mask()
@@ -41,26 +50,26 @@ namespace dip  {
     {
     }
 
-    int Mask::rows(){
+    int Mask::rows() const{
         return this->mask.rows();
     }
 
-    int Mask::cols(){
+    int Mask::cols() const{
         return this->mask.cols();
     }
 
     void Mask::set(Pixel p, int d){
         if(isOutOfMask(p)) return;
-        this->mask.set(p.x, p.y, d);
+        this->mask.set(p.x(), p.y(), d);
     }
 
     void Mask::set(int x, int y, int d){
         this->set(Pixel(x, y), d);
     }
 
-    int Mask::get(Pixel p){
+    int Mask::get(Pixel p) {
         if(isOutOfMask(p)) return -1;
-        return this->mask.get(p.x, p.y);
+        return this->mask.get(p.x(), p.y());
     }
 
     int Mask::get(int x, int y){
@@ -68,8 +77,8 @@ namespace dip  {
     }
 
     bool Mask::isOutOfMask(Pixel p){
-        int x = p.x;
-        int y = p.y;
+        int x = p.x();
+        int y = p.y();
         return !((0 <= x && x < this->rows()) && (0 <= y && y < this->cols()));
     }
 
@@ -87,7 +96,41 @@ namespace dip  {
 
         return binary;
     }
-    
+
+    void Mask::toTextFile(string filename, int value){
+        ofstream myfile(filename);
+
+        if (myfile.is_open())
+        {
+            for(size_t row = 0; row < this->rows(); ++row) {
+                for(size_t col = 0; col < this->cols(); ++col) {
+                    if(mask.get(row, col) == value) {
+                        myfile << row << " " << col << "\n";
+                    }
+                }
+            }
+            myfile.close();
+        }
+    }
+
+    void Mask::fromTextFile(string filename, int value){
+        string line;
+        ifstream myfile(filename);
+
+        if (myfile.is_open()) {
+            while (getline(myfile, line)) {
+                istringstream iss(line);
+                string x_str, y_str;
+
+                if (getline(iss, x_str, ' ') && getline(iss, y_str, ' ')) {
+                    int x = stoi(x_str);
+                    int y = stoi(y_str);
+                    this->set(x,y,value);
+                }
+            }
+            myfile.close();
+        }
+    }
 }
 
 #endif

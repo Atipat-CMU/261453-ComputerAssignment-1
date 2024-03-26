@@ -4,10 +4,11 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
-using namespace std;
 
 #include "Image.h"
 #include "Mask.h"
+
+using namespace std;
 
 namespace dip {
     class Moment
@@ -28,7 +29,7 @@ namespace dip {
         int getCentralMoment(int, int);
         float getInvariant();
     };
-    
+
     Moment::Moment()
     {
     }
@@ -98,7 +99,6 @@ namespace dip {
         float n20 = this->getCentralMoment(2,0)/pow(this->getCentralMoment(0,0), 2);
         return n02 + n20;
     }
-    
 }
 
 #endif

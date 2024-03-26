@@ -3,14 +3,16 @@
 
 #include <vector>
 #include <iostream>
-using namespace std;
+#include <string>
 
+#include "Vector2D.h"
 #include "Pixel.h"
 #include "Frame.h"
-#include "Vector2D.h"
+#include "Mask.h"
+
+using namespace std;
 
 namespace dip {
-
     class Image
     {
     private:
@@ -44,6 +46,9 @@ namespace dip {
         int getHistFreq(int);
         void printHistogram();
 
+        Image mark(Mask, int);
+        Image highlight(Mask);
+
         Image crop(Frame);
         Image operator+(Image const&);
         Image operator-(Image const&);
@@ -52,6 +57,7 @@ namespace dip {
         friend Image operator/(Image const&, double);
     };
 
+    
     Image::Image()
     {
     }
@@ -98,7 +104,7 @@ namespace dip {
 
     int Image::get(Pixel p){
         if(isOutOfImage(p)) return -1;
-        return this->image.get(p.x, p.y);
+        return this->image.get(p.x(), p.y());
     }
 
     int Image::get(int x, int y){
@@ -110,8 +116,8 @@ namespace dip {
     }
 
     bool Image::isOutOfImage(Pixel p){
-        int x = p.x;
-        int y = p.y;
+        int x = p.x();
+        int y = p.y();
         return !(0 <= x && x < this->rows() && 0 <= y && y < this->cols());
     }
 
@@ -128,6 +134,38 @@ namespace dip {
         }
     }
 
+    Image Image::mark(Mask mask, int color_value){
+        Image new_image(this->image);
+
+        for(int row = 0; row < this->image.rows(); row++){
+            for(int col = 0; col < this->image.cols(); col++){
+                if(mask.get(row, col) != 0){
+                    new_image.set(row, col, color_value);
+                }
+            }
+        }
+
+        return new_image;
+    }
+
+    Image Image::highlight(Mask mask){
+        Image new_image(this->image);
+
+        for(int row = 0; row < this->image.rows(); row++){
+            for(int col = 0; col < this->image.cols(); col++){
+                if(mask.get(row, col) != 0){
+                    new_image.set(row-1, col, 255);
+                    new_image.set(row+1, col, 255);
+                    new_image.set(row, col, 0);
+                    new_image.set(row, col-1, 255);
+                    new_image.set(row, col+1, 255);
+                }
+            }
+        }
+
+        return new_image;
+    }
+
     Image Image::operation(Image const& obj, char op){
 
         Image new_image(image.rows(), image.cols());
@@ -139,7 +177,7 @@ namespace dip {
                 if(op == '+') new_image.set(row, col, img1+img2);
                 else if(op == '-') new_image.set(row, col, img1-img2);
                 else if(op == '*') new_image.set(row, col, img1*img2);
-                else new_image.set(row, col, img1);
+                else {new_image.set(row, col, img1); cout << "wrong";}
             }
         }
 
@@ -155,7 +193,7 @@ namespace dip {
                 int img1 = obj.image.get(row, col);
                 if(op == '*') new_image.set(row, col, img1*k);
                 else if(op == '/') new_image.set(row, col, img1/k);
-                else new_image.set(row, col, img1);
+                else {new_image.set(row, col, img1); cout << "wrong";}
             }
         }
 
@@ -176,10 +214,10 @@ namespace dip {
         Pixel top = frame.getTop();
         Pixel bottom = frame.getBottom();
 
-        int c_rows = bottom.x-top.x+1;
-        int c_cols = bottom.y-top.y+1;
+        int c_rows = bottom.x()-top.x()+1;
+        int c_cols = bottom.y()-top.y()+1;
 
-        Vector2D<int> cropedImage = image.crop(top.x, top.y, bottom.x, bottom.y);
+        Vector2D<int> cropedImage = image.crop(top.x(), top.y(), bottom.x(), bottom.y());
         return Image(cropedImage);
     }
 
@@ -207,7 +245,6 @@ namespace dip {
     {
         return obj.operation(k, obj, '/');
     }
-
 }
 
 #endif

@@ -3,6 +3,10 @@
 
 #include <vector>
 
+#include "Vector2D.h"
+
+using namespace std;
+
 namespace dip {
     template<typename T>
     class Vector2D
@@ -21,7 +25,7 @@ namespace dip {
 
         void set(size_t, size_t, const T&);
         T get(size_t, size_t) const;
-        vector<T> get1D();
+        std::vector<T> get1D();
         Vector2D<T> crop(size_t, size_t, size_t, size_t);
     };
 

@@ -2,6 +2,9 @@
 #define FRAME_H
 
 #include <vector>
+
+#include "Pixel.h"
+
 using namespace std;
 
 namespace dip {
@@ -17,7 +20,7 @@ namespace dip {
         Pixel getTop();
         Pixel getBottom();
     };
-    
+
     Frame::Frame()
     {
     }

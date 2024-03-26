@@ -1,4 +1,4 @@
-#include "../include/dip.h"
+#include "../../include/dip.h"
 
 #include <iostream>
 #include <vector>
@@ -8,7 +8,7 @@ using namespace dip;
 int main(int argc, char const *argv[])
 {
     Image image;
-    image = imread("src/ca1/random_shape.pgm");
+    image = imread("../src/ca1/random_shape.pgm");
     // image.printHistogram();
 
     BlobColoring blobs(image, 0, 230);
@@ -22,8 +22,8 @@ int main(int argc, char const *argv[])
     //     cout << "invariant of Object " << i << ": " << obj_moment.getInvariant() << endl;
     // }
 
-    Image cropedImage = image.crop(frames[7]);
-    imwrite(cropedImage, "out/ca1/crop.pgm");
+    Image cropedImage = image.crop(frames[10]);
+    imwrite(cropedImage, "../out/ca1/crop.pgm");
 
     return 0;
 }

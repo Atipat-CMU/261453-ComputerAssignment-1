@@ -70,7 +70,7 @@ namespace dip {
                     for(int i = -1; i <= 1; i++){
                         for(int j = -1; j <= 1; j++){
                             if(count > 4) break;
-                            Pixel np = Pixel(p.x+i,p.y+j);
+                            Pixel np = Pixel(p.x()+i,p.y()+j);
                             if(labeling.get(np) > 0 && labeling.get(np) < min){
                                 min = labeling.get(np);
                             }

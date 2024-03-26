@@ -9,7 +9,8 @@ int main(int argc, char const *argv[])
     Image r = imread("src/ca3/SanFranPeak_red.pgm");
     Image g = imread("src/ca3/SanFranPeak_green.pgm");
 
-    Image result = g-2.0*r-b;
-    imwrite(result, "out/ca3/excessred.pgm");
+    Image result = (2.0*r);
+    result = result-r;
+    imwrite(result, "out/ca3/test1.pgm");
     return 0;
 }
