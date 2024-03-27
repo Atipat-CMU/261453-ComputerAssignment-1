@@ -9,8 +9,8 @@
 #include <sstream>
 #include <iostream>
 
-#include "./object/Image.h"
-#include "./object/Mask.h"
+#include "../object/Image.h"
+#include "../object/Mask.h"
 
 using namespace std;
 
