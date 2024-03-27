@@ -1,4 +1,4 @@
-#include "../include/dip.h"
+#include "../../include/dip.h"
 
 using namespace std;
 using namespace dip;
@@ -41,14 +41,14 @@ int eq_light(int x){
 
 int main(int argc, char const *argv[])
 {
-    Image image = imread("src/ca2/SEM256_256.pgm");
+    Image image = imread("../src/ca2/SEM256_256.pgm");
 
     // Image imageL1 = poperation(image, eq_linear1);
     // imwrite(imageL1, "out/ca2/SEM256_256_eq_linear1.pgm");
 
     Image imageH = poperation(image, eq_boostdown);
     imageH = poperation(imageH, eq_equalize);
-    imwrite(imageH, "out/ca2/SEM256_256_best.pgm");
+    imwrite(imageH, "../out/ca2/SEM256_256_best.pgm");
 
     return 0;
 }
