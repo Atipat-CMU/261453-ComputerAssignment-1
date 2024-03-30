@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/CMU/_Y3T2/261453-ComputerAssignment-1/tests/ca4",
-      "program": "d:/CMU/_Y3T2/261453-ComputerAssignment-1/tests/ca4/build/Debug/outDebug",
+      "cwd": "d:/CMU/_Y3T2/261453-ComputerAssignment-1/tests/ca1",
+      "program": "d:/CMU/_Y3T2/261453-ComputerAssignment-1/tests/ca1/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

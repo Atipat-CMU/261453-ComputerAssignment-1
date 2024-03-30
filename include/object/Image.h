@@ -35,6 +35,7 @@ namespace dip {
         int cols() const;
         int max() const;
         int area() const;
+        void normalize();
 
         Vector2D<char> getRaw();
         Vector2D<int> get();
@@ -115,6 +116,35 @@ namespace dip {
         return this->image.get(x, y);
     }
 
+    void Image::normalize(){
+        int numRows = this->image.rows();
+        int numCols = this->image.cols();
+
+        double maxVal = this->image.get(0,0);
+        double minVal = this->image.get(0,0);
+        for(int row = 0; row < numRows; row++){
+            for(int col = 0; col < numCols; col++){
+                double norm_value = this->image.get(row, col);
+                if (norm_value > maxVal) {
+                    maxVal = norm_value;
+                }
+                if (norm_value < minVal) {
+                    minVal = norm_value;
+                }
+            }
+        }
+
+        Vector2D<int> output(numRows, numCols);
+
+        for(int row = 0; row < numRows; row++){
+            for(int col = 0; col < numCols; col++){
+                int value = static_cast<int>(255 * (this->image.get(row, col) - minVal) / (maxVal-minVal));
+                output.set(row, col, value);
+            }
+        }
+        this->image = output;
+    }
+
     bool Image::isOutOfImage(Pixel p){
         int x = p.x();
         int y = p.y();
@@ -140,7 +170,7 @@ namespace dip {
         for(int row = 0; row < this->image.rows(); row++){
             for(int col = 0; col < this->image.cols(); col++){
                 if(mask.get(row, col) != 0){
-                    new_image.set(row, col, color_value);
+                    new_image.set(row, col, mask.get(row, col)-1);
                 }
             }
         }
@@ -174,13 +204,12 @@ namespace dip {
             for(int col = 0; col < image.cols(); col++){
                 int img1 = obj.image.get(row, col);
                 int img2 = this->get(row, col);
-                if(op == '+') new_image.set(row, col, img1+img2);
-                else if(op == '-') new_image.set(row, col, img1-img2);
+                if(op == '+') new_image.set(row, col, img2+img1);
+                else if(op == '-') new_image.set(row, col, img2-img1);
                 else if(op == '*') new_image.set(row, col, img1*img2);
                 else {new_image.set(row, col, img1); cout << "wrong";}
             }
         }
-
         return new_image;
     }
 
@@ -196,7 +225,6 @@ namespace dip {
                 else {new_image.set(row, col, img1); cout << "wrong";}
             }
         }
-
         return new_image;
     }
 
